@@ -210,12 +210,12 @@ if (args.overhangs == False):
 if (args.overhangs == True):
 	for y in range(0, len(cv_image)):
 		for x in range(0, len(cv_image[y])):
-			if(cv_image[y][x] < 127 and x + 1 < len(cv_image[y]) and cv_image[y][x+1] > 127):
+			if(cv_image[y][x] > 127 and x + 1 < len(cv_image[y]) and cv_image[y][x+1] < 127):
 				last_black_pixel_x_position = x
 			if(cv_image[y][x] and x == 0):
 				last_black_pixel_x_position = 0
-			if((cv_image[y][x] > 127 and x + 1 < len(cv_image[y]) and cv_image[y][x+1] < 127) or
-				(cv_image[y][x] > 127 and x + 1 == len(cv_image[y]))):
+			if((cv_image[y][x] < 127 and x + 1 < len(cv_image[y]) and cv_image[y][x+1] > 127) or
+				(cv_image[y][x] < 127 and x + 1 == len(cv_image[y]))):
 				length_of_white_segment = x - last_black_pixel_x_position 
 				channel_data.append([last_black_pixel_x_position, y, length_of_white_segment, 1, -1])
 				num_elems += 1
