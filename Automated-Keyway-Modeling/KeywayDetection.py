@@ -151,6 +151,7 @@ if(exif_orientation_array[0] == "Rotated"):
 		image = rotate(image, -int(exif_orientation_array[1]), resize = True)
 	if(exif_orientation_array[2] == "CW"):
 		image = rotate(image, int(exif_orientation_array[1]), resize = True)
+
 cv_image = img_as_ubyte(image)
 for y in range(int(.8*len(cv_image)), len(cv_image)):
 	counter = 0
@@ -172,6 +173,7 @@ for region in measure.regionprops(labels, intensity_image=None, cache=True):
 		region_label = region.label
 		region_image = region.filled_image
 cv_image = img_as_ubyte(region_image)
+cv_image = cv2.flip(cv_image, 1)
 cv2.imwrite(args.output, cv_image)
 #END FIX IMAGE ROTATION AND CONVERT TO OPENCV2 FORMAT
 
