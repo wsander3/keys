@@ -244,6 +244,10 @@ first_index = 0
 first_j = False
 
 
+#Need to find first non-negative channel
+first_channel_found = False;
+first_channel = 0
+
 
 print "Converting Keyway Profile Into OpenSCAD" 
 for i in range(channel_data_classifier, max_channel):
@@ -258,12 +262,26 @@ for i in range(channel_data_classifier, max_channel):
 		else:
 			last_index = j
 			break
-	channels += (FMT % (channel_data[first_index][0] + args.trim, channel_data[first_index][1], channel_data[first_index][2] - args.trim*2, counter))
+	
+        channels += (FMT % (channel_data[first_index][0] + args.trim, channel_data[first_index][1], channel_data[first_index][2] - args.trim*2, counter))
+        ##Need to find last non negative channel so scaling can be done properly
+        if(channel_data[first_index][2] - args.trim*2 > 0):
+                if(not(first_channel_found)):
+                        first_channel = channel_data[first_index][1]
+                        first_channel_found = True
+                last_channel = channel_data[first_index][1]
+        
 
+print(channel_data)
 crop_offset = channel_data[0][1]
+#crop_offset = 0
+print("first channel:",first_channel)
+print("last channel:",last_channel)
 
 print "Creating .scad File"
-generic_scad = generic_scad.replace('###SCALE_FACTOR###', SCALE_FACTOR % (float(args.keyway_height)/float(len(cv_image))))
+generic_scad = generic_scad.replace('###SCALE_FACTOR###', SCALE_FACTOR % (float(args.keyway_height)/float(last_channel - first_channel)))
+print(len(cv_image))
+print(crop_offset)
 generic_scad = generic_scad.replace('###CHANNELS###', channels)
 generic_scad = generic_scad.replace('###CROP_OFFSET###', str(crop_offset))
 generic_scad = generic_scad.replace('###BLADE_LENGTH###', BLADE_LENGTH % (args.blade_length - (7 - len(args.key_cuts))*.15))
