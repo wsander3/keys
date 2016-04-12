@@ -243,6 +243,8 @@ last_index = 0
 first_index = 0
 first_j = False
 
+
+
 print "Converting Keyway Profile Into OpenSCAD" 
 for i in range(channel_data_classifier, max_channel):
 	counter = 0
@@ -258,9 +260,12 @@ for i in range(channel_data_classifier, max_channel):
 			break
 	channels += (FMT % (channel_data[first_index][0] + args.trim, channel_data[first_index][1], channel_data[first_index][2] - args.trim*2, counter))
 
+crop_offset = channel_data[0][1]
+
 print "Creating .scad File"
 generic_scad = generic_scad.replace('###SCALE_FACTOR###', SCALE_FACTOR % (float(args.keyway_height)/float(len(cv_image))))
 generic_scad = generic_scad.replace('###CHANNELS###', channels)
+generic_scad = generic_scad.replace('###CROP_OFFSET###', str(crop_offset))
 generic_scad = generic_scad.replace('###BLADE_LENGTH###', BLADE_LENGTH % (args.blade_length - (7 - len(args.key_cuts))*.15))
 generic_scad = generic_scad.replace('###BLADE_WIDTH###', BLADE_WIDTH % (len(cv_image[0]) - 1))
 generic_scad = generic_scad.replace('###TIP_STOP###', TIP_STOP % (len(cv_image) - 1, len(cv_image) - 1))
